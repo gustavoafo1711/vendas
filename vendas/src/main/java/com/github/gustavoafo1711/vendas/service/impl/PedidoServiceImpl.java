@@ -17,6 +17,7 @@ import com.github.gustavoafo1711.vendas.domain.repository.Clientes;
 import com.github.gustavoafo1711.vendas.domain.repository.ItemsPedido;
 import com.github.gustavoafo1711.vendas.domain.repository.Pedidos;
 import com.github.gustavoafo1711.vendas.domain.repository.Produtos;
+import com.github.gustavoafo1711.vendas.exception.PedidoNaoEncontradoException;
 import com.github.gustavoafo1711.vendas.exception.RegraNegocioException;
 import com.github.gustavoafo1711.vendas.rest.dto.ItemPedidoDTO;
 import com.github.gustavoafo1711.vendas.rest.dto.PedidoDTO;
@@ -79,6 +80,18 @@ public class PedidoServiceImpl implements PedidoService{
 	public Optional<Pedido> obterPedidoCompleto(Integer id) {
 		
 		return pedidosRepository.findByIdFetchItens(id);
+	}
+
+
+	@Override
+	@Transactional
+	public void atualizaStatus(Integer id, StatusPedido statusPedido) {
+		pedidosRepository.findById(id)
+							.map(pedido -> {
+								pedido.setStatus(statusPedido);
+								return pedidosRepository.save(pedido);
+							}).orElseThrow(() -> new PedidoNaoEncontradoException());
+		
 	}
 	
 }

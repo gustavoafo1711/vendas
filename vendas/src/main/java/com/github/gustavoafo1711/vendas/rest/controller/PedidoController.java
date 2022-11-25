@@ -1,6 +1,7 @@
 package com.github.gustavoafo1711.vendas.rest.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.github.gustavoafo1711.vendas.domain.entity.ItemPedido;
 import com.github.gustavoafo1711.vendas.domain.entity.Pedido;
+import com.github.gustavoafo1711.vendas.domain.enums.StatusPedido;
+import com.github.gustavoafo1711.vendas.rest.dto.AtualizacaoStatusPedidoDTO;
 import com.github.gustavoafo1711.vendas.rest.dto.InformacaoItemPedidoDTO;
 import com.github.gustavoafo1711.vendas.rest.dto.InformacoesPedidoDTO;
 import com.github.gustavoafo1711.vendas.rest.dto.PedidoDTO;
@@ -52,6 +55,15 @@ public class PedidoController {
 						new ResponseStatusException(HttpStatus.NOT_FOUND, 
 						"Pedido não encontrado."));
 	}
+	
+	@PatchMapping("{id}")
+	@ResponseStatus(NO_CONTENT)
+	public void updateStatus(@PathVariable Integer id, @RequestBody AtualizacaoStatusPedidoDTO dto) {
+		
+		String novoStatus = dto.getNovoStatus();
+		service.atualizaStatus(id, StatusPedido.valueOf(novoStatus));
+	}
+	
 	
 	private InformacoesPedidoDTO converter(Pedido pedido) {
 		return InformacoesPedidoDTO.builder()
