@@ -12,6 +12,7 @@ import com.github.gustavoafo1711.vendas.domain.entity.Cliente;
 import com.github.gustavoafo1711.vendas.domain.entity.ItemPedido;
 import com.github.gustavoafo1711.vendas.domain.entity.Pedido;
 import com.github.gustavoafo1711.vendas.domain.entity.Produto;
+import com.github.gustavoafo1711.vendas.domain.enums.StatusPedido;
 import com.github.gustavoafo1711.vendas.domain.repository.Clientes;
 import com.github.gustavoafo1711.vendas.domain.repository.ItemsPedido;
 import com.github.gustavoafo1711.vendas.domain.repository.Pedidos;
@@ -43,6 +44,7 @@ public class PedidoServiceImpl implements PedidoService{
 		pedido.setTotal(dto.getTotal());
 		pedido.setDataPedido(LocalDate.now());
 		pedido.setCliente(cliente);
+		pedido.setStatus(StatusPedido.REALIZADO);
 		
 		List<ItemPedido> itemsPedido = converterItems(pedido, dto.getItems());
 		pedidosRepository.save(pedido);
