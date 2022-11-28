@@ -3,6 +3,8 @@ package com.github.gustavoafo1711.vendas.rest.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -42,7 +44,7 @@ public class ClienteControler {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cliente save(@RequestBody Cliente cliente) {
+	public Cliente save(@RequestBody @Valid Cliente cliente) {
 		return clientesRepository.save(cliente);
 	}
 
