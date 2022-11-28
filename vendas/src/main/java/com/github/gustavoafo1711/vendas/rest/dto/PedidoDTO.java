@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.github.gustavoafo1711.vendas.validation.NotEmptyList;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ public class PedidoDTO {
 	@NotNull(message = "Campo total do pedido é obrigatório.")
 	private BigDecimal total;
 	
+	@NotEmptyList(message = "Pedido não pode ser realizado sem itens.")
 	private List<ItemPedidoDTO> items;
 
 }
