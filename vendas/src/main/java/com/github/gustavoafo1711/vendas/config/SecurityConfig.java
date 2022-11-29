@@ -19,8 +19,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// TODO Auto-generated method stub
-		super.configure(auth);
+		auth.inMemoryAuthentication()
+			.passwordEncoder(passwordEncoder())
+			.withUser("Rhaenyra")
+			.password(passwordEncoder().encode("123"))
+			.roles("USER");
 	}
 	
 	@Override
