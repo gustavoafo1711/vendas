@@ -8,9 +8,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.github.gustavoafo1711.vendas.security.jwt.JwtAuthFilter;
+import com.github.gustavoafo1711.vendas.security.jwt.JwtService;
 import com.github.gustavoafo1711.vendas.service.impl.UsuarioServiceImpl;
 
 @SuppressWarnings("deprecation")
@@ -27,9 +32,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	/* até aqui */
 	
+	@Autowired
+	private JwtService jwtService;
+	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public OncePerRequestFilter jwtFilter() {
+		return new JwtAuthFilter(jwtService, usuarioServiceImpl);
 	}
 	
 	@Override
@@ -54,6 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					.permitAll()
 				.anyRequest().authenticated()
 				.and()
-				.httpBasic();
+					.sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+					.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 }
