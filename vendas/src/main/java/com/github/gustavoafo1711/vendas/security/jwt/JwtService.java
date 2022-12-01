@@ -1,15 +1,14 @@
-package com.github.gustavoafo1711.vendas;
+package com.github.gustavoafo1711.vendas.security.jwt;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashMap;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 
+import com.github.gustavoafo1711.vendas.VendasApplication;
 import com.github.gustavoafo1711.vendas.domain.entity.Usuario;
 
 import io.jsonwebtoken.Claims;
