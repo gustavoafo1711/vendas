@@ -3,6 +3,7 @@ package com.github.gustavoafo1711.vendas;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.github.gustavoafo1711.vendas.domain.entity.Usuario;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -28,6 +31,7 @@ public class JwtService {
 		long expString = Long.valueOf(expiracao);
 		LocalDateTime dataHoraExpiracao = LocalDateTime.now().plusMinutes(expString);
 		Date data = Date.from(dataHoraExpiracao.atZone(ZoneId.systemDefault()).toInstant());
+		
 		return Jwts.builder()
 					.setSubject(usuario.getLogin())
 					.setExpiration(data)
@@ -35,6 +39,29 @@ public class JwtService {
 					.compact();
 	}
 	
+	private Claims obterClaims(String token) throws ExpiredJwtException{
+		return Jwts.parser()
+					.setSigningKey(chaveAssinatura)
+					.parseClaimsJws(token)
+					.getBody();
+	}
+	
+	public boolean tokenValido(String token) {
+		try {
+			Claims claims = obterClaims(token);
+			Date dataExpiracao = claims.getExpiration();
+			LocalDateTime localDateTime = 
+					dataExpiracao.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+			return !LocalDateTime.now().isAfter(localDateTime);
+		}catch(Exception e) {
+			return false;
+		}
+		
+	}
+	
+	public String obterLoginUsuario(String token) throws ExpiredJwtException{
+		return (String) obterClaims(token).getSubject();
+	}
 	
 	
 	public static void main(String[] args) {
@@ -45,7 +72,10 @@ public class JwtService {
 		System.out.println("\nToken JWT:");
 		System.out.println(token);
 			
+		boolean isTokenValido =  service.tokenValido(token);
+		System.out.println("\no token está válido? " + isTokenValido);
 		
+		System.out.println("\nLogin do Usuário: " + service.obterLoginUsuario(token));
 	}
 
 	
