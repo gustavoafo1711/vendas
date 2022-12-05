@@ -43,7 +43,8 @@ public class ClienteControler {
 		@ApiResponse(code = 200, message = "Cliente encontrado."),
 		@ApiResponse(code = 404, message = "Cliente não encontrado para o ID informado.")
 	})
-	public Cliente getClienteById(@PathVariable @ApiParam("ID do Cliente") Integer id) {
+	public Cliente getClienteById(@PathVariable 
+									@ApiParam("ID do Cliente") Integer id) {
 		return clientesRepository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
 											"Cliente não encontrado."));

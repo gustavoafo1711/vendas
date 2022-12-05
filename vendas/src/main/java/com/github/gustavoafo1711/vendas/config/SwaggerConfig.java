@@ -38,7 +38,8 @@ public class SwaggerConfig {
 				  .build() 
 				  .securityContexts(Arrays.asList(securityContext()))
 				  .securitySchemes(Arrays.asList(apiKey()))
-				  .apiInfo(apiInfo()); }
+				  .apiInfo(apiInfo()); 
+		  }
 	  
 	  private Contact contact() { 
 		  return new Contact("Gustavo Fontenele",
